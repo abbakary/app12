@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Bike, Clock } from 'lucide-react';
+import { MapPin, Bike, Clock, Navigation } from 'lucide-react';
 import Image from 'next/image';
 
 interface DeliveryMapProps {
@@ -10,6 +10,11 @@ interface DeliveryMapProps {
   deliveryAddress?: string;
   estimatedTime?: string;
   isDelivering?: boolean;
+  deliveryProgress?: number;
+  driverLocation?: {
+    lat: number;
+    lng: number;
+  };
   deliveryPerson?: {
     name: string;
     phone: string;
@@ -23,13 +28,15 @@ export function DeliveryMap({
   deliveryAddress = 'Your Location',
   estimatedTime = '15-25',
   isDelivering = true,
+  deliveryProgress: externalProgress = 0,
+  driverLocation,
   deliveryPerson,
 }: DeliveryMapProps) {
-  const [deliveryProgress, setDeliveryProgress] = useState(0);
+  const [deliveryProgress, setDeliveryProgress] = useState(externalProgress);
 
-  // Simulate delivery progress
+  // Simulate delivery progress if not provided externally
   useEffect(() => {
-    if (!isDelivering) return;
+    if (!isDelivering || externalProgress > 0) return;
 
     const interval = setInterval(() => {
       setDeliveryProgress(prev => {
@@ -39,7 +46,14 @@ export function DeliveryMap({
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [isDelivering]);
+  }, [isDelivering, externalProgress]);
+
+  // Update progress if external progress changes
+  useEffect(() => {
+    if (externalProgress > 0) {
+      setDeliveryProgress(externalProgress);
+    }
+  }, [externalProgress]);
 
   return (
     <div className="w-full">

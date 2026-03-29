@@ -9,14 +9,27 @@ interface TrackingStepperProps {
 
 const STEPS = [
   { id: 'pending', label: 'Order Received', icon: Clock, description: 'We have received your order' },
-  { id: 'confirmed', label: 'Confirmed', icon: Check, description: 'Restaurant has confirmed your order' },
   { id: 'preparing', label: 'Preparing', icon: ChefHat, description: 'Chef is preparing your meal' },
   { id: 'ready', label: 'Ready / Out for Delivery', icon: Bike, description: 'Your order is on its way or ready for pickup' },
-  { id: 'completed', label: 'Delivered / Picked Up', icon: CheckCircle2, description: 'Enjoy your meal!' },
+  { id: 'paid', label: 'Delivered / Picked Up', icon: CheckCircle2, description: 'Enjoy your meal!' },
 ];
 
+// Map actual database status values to display steps
+const STATUS_MAP: Record<string, string> = {
+  'pending': 'pending',
+  'preparing': 'preparing',
+  'in-progress': 'preparing',
+  'ready': 'ready',
+  'out-for-delivery': 'ready',
+  'served': 'ready',
+  'paid': 'paid',
+  'completed': 'paid',
+  'cancelled': 'pending',
+};
+
 export function TrackingStepper({ status }: TrackingStepperProps) {
-  const currentStepIndex = STEPS.findIndex(step => step.id === status);
+  const mappedStatus = STATUS_MAP[status?.toLowerCase() || ''] || status || 'pending';
+  const currentStepIndex = STEPS.findIndex(step => step.id === mappedStatus);
   const normalizedIndex = currentStepIndex === -1 ? 0 : currentStepIndex;
 
   return (

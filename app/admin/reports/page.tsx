@@ -116,14 +116,14 @@ export default function ReportsPage() {
   const summaryCards = [
     {
       title: 'Total Revenue',
-      value: `TSH ${stats.totalRevenue.toLocaleString()}`,
+      value: `TSH ${stats.totalRevenue.toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
       description: 'All time',
       icon: DollarSign,
       color: 'text-status-available',
     },
     {
       title: "Today's Revenue",
-      value: `TSH ${stats.todayRevenue.toLocaleString()}`,
+      value: `TSH ${stats.todayRevenue.toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
       description: `${stats.revenueChange >= 0 ? '+' : ''}${stats.revenueChange.toFixed(1)}% from yesterday`,
       icon: TrendingUp,
       color: stats.revenueChange >= 0 ? 'text-status-available' : 'text-red-500',
@@ -137,7 +137,7 @@ export default function ReportsPage() {
     },
     {
       title: 'Avg Order Value',
-      value: `TSH ${stats.avgOrderValue.toLocaleString()}`,
+      value: `TSH ${stats.avgOrderValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
       description: 'Per completed order',
       icon: Clock,
       color: 'text-orange-500',
@@ -191,9 +191,9 @@ export default function ReportsPage() {
                   <BarChart data={stats.last7Days}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                     <XAxis dataKey="date" className="text-muted-foreground" />
-                    <YAxis 
+                    <YAxis
                       className="text-muted-foreground"
-                      tickFormatter={(value) => `TSH ${value}`}
+                      tickFormatter={(value) => `TSH ${value.toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
                     />
                     <Tooltip
                       contentStyle={{
@@ -202,7 +202,7 @@ export default function ReportsPage() {
                         borderRadius: '8px',
                       }}
                       formatter={(value: number, name: string) => [
-                        name === 'sales' ? `$${value.toFixed(2)}` : value,
+                        name === 'sales' ? `TSH ${value.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : value,
                         name === 'sales' ? 'Revenue' : 'Orders'
                       ]}
                     />
@@ -240,7 +240,7 @@ export default function ReportsPage() {
                         ))}
                       </Pie>
                       <Tooltip
-                        formatter={(value: number) => [`$${value.toFixed(2)}`, 'Revenue']}
+                        formatter={(value: number) => [`TSH ${value.toLocaleString(undefined, { maximumFractionDigits: 0 })}`, 'Revenue']}
                       />
                     </PieChart>
                   </ResponsiveContainer>
@@ -275,7 +275,7 @@ export default function ReportsPage() {
                           </div>
                         </TableCell>
                         <TableCell className="text-right">{cat.count}</TableCell>
-                        <TableCell className="text-right">${cat.value.toFixed(2)}</TableCell>
+                        <TableCell className="text-right">TSH {cat.value.toLocaleString(undefined, { maximumFractionDigits: 0 })}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -316,7 +316,7 @@ export default function ReportsPage() {
                       </TableCell>
                       <TableCell className="text-right">{item.count}</TableCell>
                       <TableCell className="text-right font-semibold">
-                        ${item.revenue.toFixed(2)}
+                        TSH {item.revenue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                       </TableCell>
                     </TableRow>
                   ))}

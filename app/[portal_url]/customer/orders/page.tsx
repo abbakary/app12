@@ -6,18 +6,19 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import {
-  Clock,
-  MapPin,
-  Phone,
-  ChefHat,
-  CheckCircle,
-  AlertCircle,
-  Home,
-  Package,
-  Utensils,
-  ArrowRight,
-  Receipt,
-} from 'lucide-react';
+    Clock,
+    MapPin,
+    Phone,
+    ChefHat,
+    CheckCircle,
+    AlertCircle,
+    Home,
+    Package,
+    Utensils,
+    ArrowRight,
+    Receipt,
+    Copy,
+  } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
 
@@ -197,16 +198,31 @@ export default function PortalCustomerOrdersPage() {
                         </span>
                       </div>
                       {order.couponCode && (
-                        <p className="text-[10px] font-black text-primary uppercase tracking-widest mt-1">
-                          Coupon: {order.couponCode}
-                        </p>
+                        <div className="mt-3 p-3 bg-primary/10 border border-primary/30 rounded-lg">
+                          <p className="text-[8px] font-black text-primary uppercase tracking-[0.15em] mb-1.5">Order Identity</p>
+                          <div className="flex items-center gap-2 justify-between">
+                            <span className="text-sm font-black text-primary tracking-tight">{order.couponCode}</span>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigator.clipboard.writeText(order.couponCode!);
+                                toast.success('Coupon copied!');
+                              }}
+                              className="h-7 w-7 p-0 text-primary hover:bg-primary/20"
+                            >
+                              <Copy className="w-3.5 h-3.5" />
+                            </Button>
+                          </div>
+                        </div>
                       )}
                       <p className="text-[11px] font-bold text-gray-400 mt-1">
                         {new Date(order.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                       </p>
                     </div>
                     <div className="flex flex-col items-end gap-1">
-                       <span className="text-xl font-black text-gray-900 dark:text-white tracking-tight">${order.total.toFixed(2)}</span>
+                       <span className="text-xl font-black text-gray-900 dark:text-white tracking-tight">TSH {order.total.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{order.items.length} {order.items.length === 1 ? 'item' : 'items'}</span>
                     </div>
                   </div>
@@ -288,4 +304,3 @@ export default function PortalCustomerOrdersPage() {
     </div>
   );
 }
-

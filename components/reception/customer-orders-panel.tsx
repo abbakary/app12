@@ -227,7 +227,7 @@ export function CustomerOrdersPanel({ restaurantId, onOrderApproved }: { restaur
                 </div>
                 <div className="border-t border-slate-200 dark:border-slate-700 mt-2 pt-2 flex justify-between font-bold">
                   <span>Total:</span>
-                  <span className="text-lg text-blue-600">${order.total.toFixed(2)}</span>
+                  <span className="text-lg text-blue-600">TSH {order.total.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
                 </div>
               </div>
 

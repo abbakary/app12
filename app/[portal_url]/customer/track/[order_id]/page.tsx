@@ -29,6 +29,7 @@ export default function OrderTrackingPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [estimatedTime, setEstimatedTime] = useState('15-25');
   const [deliveryProgress, setDeliveryProgress] = useState(0);
+  const [driverLocation, setDriverLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
     fetchOrder();
@@ -36,11 +37,18 @@ export default function OrderTrackingPage() {
     // Connect to WebSocket for real-time updates
     const ws = new WebSocket(`${WS_URL}/ws`);
 
+    ws.onopen = () => {
+      console.log('WebSocket connected');
+    };
+
     ws.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
+        console.log('Received message:', message);
+
         // Handle driver location updates
         if (message.type === 'DRIVER_LOCATION_UPDATED' && order?.driver?.id === message.driver_id) {
+          console.log('Driver location updated:', message);
           setOrder(prev => ({
             ...prev,
             driver: {
@@ -49,13 +57,22 @@ export default function OrderTrackingPage() {
               longitude: message.longitude
             }
           }));
+          // Also update the driver location state for map
+          if (message.latitude && message.longitude) {
+            setDriverLocation({
+              lat: message.latitude,
+              lng: message.longitude
+            });
+          }
         }
         // Handle driver assignment
-        if (message.type === 'DRIVER_ASSIGNED' && message.order_id === orderId) {
+        else if (message.type === 'DRIVER_ASSIGNED' && message.order_id === orderId) {
+          console.log('Driver assigned, fetching order');
           fetchOrder();
         }
-        // Handle order status changes
-        if (message.type === 'ORDER_STATUS_CHANGED' && message.order_id === orderId) {
+        // Handle order status changes (matches backend broadcast)
+        else if ((message.type === 'ORDER_STATUS_CHANGED' || message.type === 'order_update') && message.order_id === orderId) {
+          console.log('Order status changed, fetching order');
           fetchOrder();
         }
       } catch (err) {
@@ -63,7 +80,19 @@ export default function OrderTrackingPage() {
       }
     };
 
-    return () => ws.close();
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket disconnected');
+    };
+
+    return () => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.close();
+      }
+    };
   }, [orderId]);
 
   // Simulate delivery progress (if order is in delivery)

@@ -357,7 +357,7 @@ export default function PortalCustomerMenuPage() {
                   </div>
                   <span className="text-[16px] tracking-tight">{cartItemCount} {cartItemCount === 1 ? 'Item' : 'Items'}</span>
                 </div>
-                <span className="text-[18px] tracking-tight font-black">${cartGrandTotal.toFixed(2)}</span>
+                <span className="text-[18px] tracking-tight font-black">TSH {cartGrandTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
               </Button>
             </DialogTrigger>
 
@@ -382,7 +382,7 @@ export default function PortalCustomerMenuPage() {
                               {item.menuItem.name}
                             </p>
                             <p className="text-[13px] font-black text-primary mt-0.5">
-                              ${item.menuItem.price.toFixed(2)}
+                              TSH {item.menuItem.price.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                             </p>
                           </div>
 
@@ -482,15 +482,15 @@ export default function PortalCustomerMenuPage() {
                     <div className="p-6 bg-white dark:bg-gray-900 rounded-[32px] shadow-sm space-y-4 border border-gray-50 dark:border-gray-800">
                       <div className="flex justify-between items-center text-[15px]">
                         <span className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Subtotal</span>
-                        <span className="font-bold text-gray-900 dark:text-white">${cartTotal.toFixed(2)}</span>
+                        <span className="font-bold text-gray-900 dark:text-white">TSH {cartTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
                       </div>
                       <div className="flex justify-between items-center text-[15px]">
                         <span className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Service Fee (10%)</span>
-                        <span className="font-bold text-gray-900 dark:text-white">${cartTax.toFixed(2)}</span>
+                        <span className="font-bold text-gray-900 dark:text-white">TSH {cartTax.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
                       </div>
                       <div className="pt-4 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center">
                         <span className="text-gray-900 dark:text-white font-black text-xl tracking-tight">Total</span>
-                        <span className="text-primary font-black text-2xl tracking-tight">${cartGrandTotal.toFixed(2)}</span>
+                        <span className="text-primary font-black text-2xl tracking-tight">TSH {cartGrandTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
                       </div>
                     </div>
                   </div>
@@ -520,7 +520,7 @@ export default function PortalCustomerMenuPage() {
                   <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-[32px] border border-gray-100 dark:border-gray-700 space-y-4">
                     <div className="flex justify-between items-center px-2">
                       <span className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Total Amount</span>
-                      <span className="text-2xl font-black text-gray-900 dark:text-white">${cartGrandTotal.toFixed(2)}</span>
+                      <span className="text-2xl font-black text-gray-900 dark:text-white">TSH {cartGrandTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
                     </div>
 
                     {/* Mock Payment Badge */}
