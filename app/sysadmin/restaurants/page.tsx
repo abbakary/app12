@@ -15,7 +15,9 @@ import {
     Eye,
     EyeOff,
     Loader,
-    ChefHat
+    ChefHat,
+    Smartphone,
+    CreditCard
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -33,6 +35,10 @@ interface Restaurant {
     created_at: string;
     logo_url?: string;
     customer_portal_url?: string;
+    clickpesa_mobile_number?: string;
+    bank_account_number?: string;
+    bank_name?: string;
+    account_holder_name?: string;
 }
 
 export default function RestaurantsPage() {
@@ -51,7 +57,11 @@ export default function RestaurantsPage() {
         admin_email: '',
         admin_password: '',
         admin_pin: '',
-        logo_url: ''
+        logo_url: '',
+        clickpesa_mobile_number: '',
+        bank_account_number: '',
+        bank_name: '',
+        account_holder_name: ''
     });
     const [logoFile, setLogoFile] = useState<File | null>(null);
     const [logoPreview, setLogoPreview] = useState<string>('');
@@ -146,7 +156,11 @@ export default function RestaurantsPage() {
                     admin_email: '',
                     admin_password: '',
                     admin_pin: '',
-                    logo_url: ''
+                    logo_url: '',
+                    clickpesa_mobile_number: '',
+                    bank_account_number: '',
+                    bank_name: '',
+                    account_holder_name: ''
                 });
                 setLogoFile(null);
                 setLogoPreview('');
@@ -375,6 +389,82 @@ export default function RestaurantsPage() {
                                 </div>
                             </div>
 
+                            {/* Payment Method */}
+                            <div className="space-y-6 pt-8 border-t border-black/5 dark:border-white/5">
+                                <h3 className="text-sm font-black text-gray-700 dark:text-gray-300 uppercase tracking-wider">Payment Method</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">Add payment details where the organization will receive payments (mobile money or bank account)</p>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                                            Mobile Money Number
+                                        </label>
+                                        <div className="relative">
+                                            <Smartphone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                            <input
+                                                type="tel"
+                                                name="clickpesa_mobile_number"
+                                                value={formData.clickpesa_mobile_number}
+                                                onChange={handleInputChange}
+                                                className="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-black/20 border border-black/5 dark:border-white/5 rounded-[16px] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                placeholder="+256 700 123456"
+                                            />
+                                        </div>
+                                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                                            For mobile money payments (ClickPesa, MTN, Airtel, etc.)
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                                            Bank Account Number
+                                        </label>
+                                        <div className="relative">
+                                            <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                            <input
+                                                type="text"
+                                                name="bank_account_number"
+                                                value={formData.bank_account_number}
+                                                onChange={handleInputChange}
+                                                className="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-black/20 border border-black/5 dark:border-white/5 rounded-[16px] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                placeholder="1234567890"
+                                            />
+                                        </div>
+                                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                                            Bank account for receiving payments
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                                            Bank Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="bank_name"
+                                            value={formData.bank_name}
+                                            onChange={handleInputChange}
+                                            className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-black/5 dark:border-white/5 rounded-[16px] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                            placeholder="e.g., Standard Bank"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                                            Account Holder Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="account_holder_name"
+                                            value={formData.account_holder_name}
+                                            onChange={handleInputChange}
+                                            className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-black/5 dark:border-white/5 rounded-[16px] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                            placeholder="Organization name"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
                             {/* Branding */}
                             <div className="space-y-6 pt-8 border-t border-black/5 dark:border-white/5">
                                 <h3 className="text-sm font-black text-gray-700 dark:text-gray-300 uppercase tracking-wider">Branding</h3>
@@ -498,11 +588,25 @@ export default function RestaurantsPage() {
                                                         <p className="text-gray-900 dark:text-white font-medium truncate">{restaurant.email}</p>
                                                     </div>
                                                 )}
-                                                
+
                                                 {restaurant.phone && (
                                                     <div className="text-sm">
                                                         <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">PHONE</p>
                                                         <p className="text-gray-900 dark:text-white font-medium">{restaurant.phone}</p>
+                                                    </div>
+                                                )}
+
+                                                {(restaurant.clickpesa_mobile_number || restaurant.bank_account_number) && (
+                                                    <div className="text-sm">
+                                                        <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-1">PAYMENT METHOD</p>
+                                                        <div className="space-y-1">
+                                                            {restaurant.clickpesa_mobile_number && (
+                                                                <p className="text-gray-900 dark:text-white font-medium text-xs">{restaurant.clickpesa_mobile_number}</p>
+                                                            )}
+                                                            {restaurant.bank_account_number && (
+                                                                <p className="text-gray-900 dark:text-white font-medium text-xs">{restaurant.bank_name || 'Bank'}: {restaurant.bank_account_number}</p>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 )}
 

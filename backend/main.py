@@ -3,14 +3,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
 
 import models
 from database import engine
 from websocket_manager import manager
+from clickpesa_startup import initialize_clickpesa_client, shutdown_clickpesa_client
 
 from routers import auth, orders, tables, menu, payments, stats, notifications, seed, restaurants, platform, drivers, uploads, users, analytics, customers, messaging, clickpesa_payments
+
+logger = logging.getLogger(__name__)
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -34,6 +38,24 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize services on application startup"""
+    try:
+        await initialize_clickpesa_client()
+    except Exception as e:
+        logger.error(f"Startup initialization error: {str(e)}")
+        # In development, continue even if ClickPesa is not configured
+        if os.getenv("NODE_ENV") == "production":
+            raise
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Cleanup services on application shutdown"""
+    await shutdown_clickpesa_client()
+
 
 @app.get("/")
 def read_root():

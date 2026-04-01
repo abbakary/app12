@@ -17,6 +17,10 @@ class Restaurant(Base):
     # ClickPesa integration fields
     clickpesa_mobile_number = Column(String(20), nullable=True)  # Tenant mobile number to receive payments
     clickpesa_enabled = Column(Boolean, default=False)  # Whether ClickPesa is enabled for this tenant
+    # Bank account details for receiving payments
+    bank_account_number = Column(String(100), nullable=True)  # Bank account for receiving payments
+    bank_name = Column(String(255), nullable=True)  # Bank name
+    account_holder_name = Column(String(255), nullable=True)  # Account holder name
     created_at = Column(DateTime, default=datetime.utcnow)
 
 class User(Base):

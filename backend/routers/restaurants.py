@@ -100,6 +100,10 @@ async def create_restaurant(
         phone=restaurant.phone,
         address=restaurant.address,
         logo_url=restaurant.logo_url,
+        clickpesa_mobile_number=restaurant.clickpesa_mobile_number,
+        bank_account_number=restaurant.bank_account_number,
+        bank_name=restaurant.bank_name,
+        account_holder_name=restaurant.account_holder_name,
         payment_status="pending",  # Will be updated to 'active' or 'failed' after Airpay creation
         customer_portal_url=portal_url  # Auto-generate portal URL
     )

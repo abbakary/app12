@@ -14,6 +14,10 @@ class RestaurantCreate(RestaurantBase):
     admin_password: str
     admin_pin: str
     logo_url: Optional[str] = None
+    clickpesa_mobile_number: Optional[str] = None
+    bank_account_number: Optional[str] = None
+    bank_name: Optional[str] = None
+    account_holder_name: Optional[str] = None
 
 class Restaurant(RestaurantBase):
     id: str
@@ -21,6 +25,10 @@ class Restaurant(RestaurantBase):
     payment_status: str = "pending"
     customer_portal_url: Optional[str] = None
     logo_url: Optional[str] = None
+    clickpesa_mobile_number: Optional[str] = None
+    bank_account_number: Optional[str] = None
+    bank_name: Optional[str] = None
+    account_holder_name: Optional[str] = None
     created_at: datetime
 
     @validator("logo_url", pre=True, always=True)
