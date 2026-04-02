@@ -242,7 +242,7 @@ export default function ReceptionCustomersPage() {
                             {format(new Date(o.createdAt), 'MMM d, HH:mm')}
                           </TableCell>
                           <TableCell className="text-xs capitalize">{o.orderType || '—'}</TableCell>
-                          <TableCell className="text-xs text-right">${o.total.toFixed(2)}</TableCell>
+                          <TableCell className="text-xs text-right">TSH {o.total.toLocaleString()}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

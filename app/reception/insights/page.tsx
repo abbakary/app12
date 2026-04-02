@@ -26,6 +26,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { format } from 'date-fns';
+import { ChartQA } from '@/components/insights/chart-qa';
 
 const COLORS = ['#6366f1', '#8b5cf6', '#ec4899', '#14b8a6', '#f59e0b', '#64748b'];
 
@@ -212,6 +213,17 @@ export default function ReceptionInsightsPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Interactive Chart Q&A */}
+      <ChartQA
+        chartData={{
+          menuTop: data.menuTop,
+          categoryRevenue: data.categoryRevenue,
+          customers: data.customers,
+          todaySales: data.todaySales || 0,
+          todayOrders: data.todayOrders || 0,
+        }}
+      />
     </div>
   );
 }

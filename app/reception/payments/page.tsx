@@ -62,7 +62,7 @@ export default function PaymentsPage() {
                       <Icon className="h-5 w-5 text-primary" />
                     </div>
                     <div>
-                      <CardTitle className="text-lg">${payment.amount.toFixed(2)}</CardTitle>
+                      <CardTitle className="text-lg">TSH {payment.amount.toLocaleString()}</CardTitle>
                       <p className="text-xs text-muted-foreground capitalize">
                         {payment.method}
                       </p>

@@ -166,7 +166,7 @@ export function PaymentDialog({ order, open, onOpenChange, onComplete }: Payment
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         {!isPaid ? (
           <>
             <DialogHeader>
@@ -176,7 +176,7 @@ export function PaymentDialog({ order, open, onOpenChange, onComplete }: Payment
               </DialogDescription>
             </DialogHeader>
 
-            <div className="py-4">
+            <div className="space-y-4">
               {checkoutStep === 'payment' && method === 'mobile' ? (
                 <ClickPesaForm
                   amount={order.total}
@@ -188,91 +188,100 @@ export function PaymentDialog({ order, open, onOpenChange, onComplete }: Payment
                 />
               ) : (
                 <>
-                  {/* Order Summary */}
-                  <div className="bg-secondary/50 rounded-lg p-4 mb-6">
-                    <div className="space-y-2 text-sm">
+                  {/* Order Summary - Compact */}
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-xl p-4 border border-blue-100 dark:border-blue-900/30">
+                    <div className="max-h-[150px] overflow-y-auto space-y-1.5 text-xs">
                       {order.items.map(item => (
-                        <div key={item.menuItemId} className="flex justify-between">
-                          <span>
-                            {item.menuItem.name} x{item.quantity}
+                        <div key={item.menuItemId} className="flex justify-between items-center">
+                          <span className="truncate flex-1">
+                            {item.menuItem.name} <span className="text-muted-foreground">×{item.quantity}</span>
                           </span>
-                          <span>${(item.menuItem.price * item.quantity).toFixed(2)}</span>
+                          <span className="font-medium text-blue-600 dark:text-blue-400 ml-2 flex-shrink-0">
+                            TSH {(item.menuItem.price * item.quantity).toLocaleString()}
+                          </span>
                         </div>
                       ))}
-                      <div className="border-t pt-2 mt-2">
-                        <div className="flex justify-between text-muted-foreground">
-                          <span>Subtotal</span>
-                          <span>${order.subtotal.toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between text-muted-foreground">
-                          <span>Tax</span>
-                          <span>${order.tax.toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between font-bold text-lg mt-1">
-                          <span>Total</span>
-                          <span>${order.total.toFixed(2)}</span>
-                        </div>
+                    </div>
+
+                    <div className="border-t border-blue-200 dark:border-blue-900/50 mt-3 pt-3 space-y-1.5 text-xs">
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>Subtotal</span>
+                        <span>TSH {order.subtotal.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>Tax (10%)</span>
+                        <span>TSH {order.tax.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between font-bold text-base pt-1 border-t border-blue-200 dark:border-blue-900/50">
+                        <span>Total</span>
+                        <span className="text-blue-600 dark:text-blue-400">TSH {order.total.toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
 
                   {showQR ? (
-                    <div className="text-center">
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Customer scans this QR code to pay
+                    <div className="flex flex-col items-center justify-center py-4">
+                      <p className="text-xs text-muted-foreground mb-3">
+                        Customer scans to pay
                       </p>
-                      <div className="bg-white p-4 rounded-lg inline-block mx-auto">
-                        <QRCodeSVG value={qrData} size={200} />
+                      <div className="bg-white p-3 rounded-lg inline-block">
+                        <QRCodeSVG value={qrData} size={160} />
                       </div>
-                      <div className="mt-4 space-y-2">
-                        <p className="font-semibold text-xl">TSH {order.total.toLocaleString()}</p>
-                        <Button
-                          variant="outline"
-                          className="w-full"
-                          onClick={() => setShowQR(false)}
-                        >
-                          Back
-                        </Button>
-                        <Button
-                          className="w-full"
-                          onClick={handleQRPaymentConfirm}
-                          disabled={createPayment.isPending}
-                        >
-                          Confirm Payment Received
-                        </Button>
+                      <div className="mt-4 space-y-2 w-full">
+                        <p className="font-bold text-lg text-center text-blue-600 dark:text-blue-400">
+                          TSH {order.total.toLocaleString()}
+                        </p>
+                        <div className="grid grid-cols-2 gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setShowQR(false)}
+                          >
+                            Back
+                          </Button>
+                          <Button
+                            size="sm"
+                            onClick={handleQRPaymentConfirm}
+                            disabled={createPayment.isPending}
+                          >
+                            {createPayment.isPending ? 'Processing...' : 'Confirm'}
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   ) : (
                     <>
-                      <Label className="text-base font-semibold mb-3 block">
-                        Select Payment Method
-                      </Label>
-                      <RadioGroup
-                        value={method}
-                        onValueChange={(v) => setMethod(v as PaymentMethod)}
-                        className="grid grid-cols-2 gap-3"
-                      >
-                        {paymentMethods.map(({ value, label, icon: Icon }) => (
-                          <Label
-                            key={value}
-                            htmlFor={value}
-                            className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 cursor-pointer transition-colors ${
-                              method === value
-                                ? 'border-primary bg-primary/5'
-                                : 'border-border hover:border-primary/50'
-                            }`}
-                          >
-                            <RadioGroupItem value={value} id={value} className="sr-only" />
-                            <Icon className={`h-6 w-6 mb-2 ${method === value ? 'text-primary' : 'text-muted-foreground'}`} />
-                            <span className={`text-sm font-medium ${method === value ? 'text-primary' : ''}`}>
-                              {label}
-                            </span>
-                          </Label>
-                        ))}
-                      </RadioGroup>
+                      <div>
+                        <Label className="text-sm font-semibold mb-3 block text-muted-foreground">
+                          Payment Method
+                        </Label>
+                        <RadioGroup
+                          value={method}
+                          onValueChange={(v) => setMethod(v as PaymentMethod)}
+                          className="grid grid-cols-2 gap-2"
+                        >
+                          {paymentMethods.map(({ value, label, icon: Icon }) => (
+                            <Label
+                              key={value}
+                              htmlFor={value}
+                              className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all ${
+                                method === value
+                                  ? 'border-primary bg-primary/10 shadow-sm'
+                                  : 'border-border hover:border-primary/50 bg-muted/30'
+                              }`}
+                            >
+                              <RadioGroupItem value={value} id={value} className="sr-only" />
+                              <Icon className={`h-5 w-5 mb-1.5 ${method === value ? 'text-primary' : 'text-muted-foreground'}`} />
+                              <span className={`text-xs font-medium ${method === value ? 'text-primary' : 'text-muted-foreground'}`}>
+                                {label}
+                              </span>
+                            </Label>
+                          ))}
+                        </RadioGroup>
+                      </div>
 
                       <Button
-                        className="w-full mt-6"
+                        className="w-full mt-4"
                         size="lg"
                         onClick={handlePaymentMethodSelect}
                         disabled={createPayment.isPending}
@@ -283,7 +292,7 @@ export function PaymentDialog({ order, open, onOpenChange, onComplete }: Payment
                           ? 'Show QR Code'
                           : method === 'mobile'
                           ? 'Pay via Mobile Money'
-                          : `Pay $${order.total.toFixed(2)}`}
+                          : `Pay TSH ${order.total.toLocaleString()}`}
                       </Button>
                     </>
                   )}

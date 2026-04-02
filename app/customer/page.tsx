@@ -635,7 +635,7 @@ export default function CustomerMenuPage() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-lg">${cartGrandTotal.toFixed(2)}</p>
+                    <p className="font-bold text-lg">TSH {cartGrandTotal.toLocaleString()}</p>
                     <p className="text-xs opacity-90">incl. tax</p>
                   </div>
                 </div>
@@ -833,15 +833,15 @@ export default function CustomerMenuPage() {
                       <div className="space-y-2 pt-4 border-t border-gray-200 dark:border-gray-800">
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-600 dark:text-gray-400">Subtotal</span>
-                          <span className="font-medium">${cartTotal.toFixed(2)}</span>
+                          <span className="font-medium">TSH {cartTotal.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-600 dark:text-gray-400">Tax (10%)</span>
-                          <span className="font-medium">${cartTax.toFixed(2)}</span>
+                          <span className="font-medium">TSH {cartTax.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between text-base font-bold pt-2">
                           <span>Total</span>
-                          <span className="text-blue-600 dark:text-blue-400 text-xl">${cartGrandTotal.toFixed(2)}</span>
+                          <span className="text-blue-600 dark:text-blue-400 text-xl">TSH {cartGrandTotal.toLocaleString()}</span>
                         </div>
                       </div>
                     </div>

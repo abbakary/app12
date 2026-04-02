@@ -44,7 +44,7 @@ export default function AdminDashboard() {
     },
     {
       title: 'Avg Order Value',
-      value: `$${avgOrderValue.toFixed(2)}`,
+      value: `TSH ${avgOrderValue.toLocaleString()}`,
       description: 'Per completed order',
       icon: TrendingUp,
       bgGradient: 'from-fuchsia-500 to-purple-600',
@@ -178,7 +178,7 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold">${order.total.toFixed(2)}</p>
+                      <p className="font-bold">TSH {order.total.toLocaleString()}</p>
                       <p className="text-xs text-muted-foreground capitalize">{order.status}</p>
                     </div>
                   </div>
